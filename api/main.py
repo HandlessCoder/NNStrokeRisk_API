@@ -20,7 +20,7 @@ except:
 
 X_train = datos.values
 
-explainer = shap.DeepExplainer(model,torch.tensor(X_train[:100]))
+explainer = shap.DeepExplainer(model,torch.tensor(X_train))
 
 columnas = ['Femenino', 'Masculino', 'Edad', 'Dolor de pecho', 'Presión arterial elevada', 'Latidos Irregulares', 'Falta de Aire', 'Fatiga', 'Mareo', 'Hinchazón', 'Dolor en cuello o mandíbula', 'Sudoración excesiva', 'Tos persistente', 'Náuseas', 'Malestar en el pecho', 'Extremidades frías', 'Ronquidos o apnea', 'Ansiedad']
 
