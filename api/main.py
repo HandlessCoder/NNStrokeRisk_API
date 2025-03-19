@@ -29,7 +29,7 @@ app = FastAPI()
 @app.post("/predict")
 
 async def predict(data: dict):
-    input_data = data['caso_de_estudio']
+    input_data = data['informacion_usuario']
     input_data = np.float32(list(input_data.values()))
     tensorInput = torch.tensor(np.array(input_data).reshape((1,18)))
 

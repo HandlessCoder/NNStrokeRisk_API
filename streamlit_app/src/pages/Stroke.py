@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import google.generativeai as genai
+import requests
 
 # Configurar la API Key desde una variable de entorno
 api_key = "AIzaSyC-CnTocy4rY5wqj944xyNGFK8MbzBFE_4"
@@ -34,7 +35,13 @@ def obtener_recomendaciones(datos_paciente):
     except Exception as e:
         # Devuelve un mensaje de error en caso de que falle la API
         return f"Error en la API: {str(e)}"
-    
+
+
+def obtener_prediccion(datos_paciente):
+
+
+    return 
+
 
 def main():
 
@@ -167,13 +174,46 @@ def main():
         unsafe_allow_html=True
     )
 
+
+
     # Botón centrado
     if st.button("Predecir Riesgo"):
-        patient_data = {
-            "age": age,
-            "gender": gender,
-            **symptoms_selected
+        api_symptoms = {key: int(value) for key, value in symptoms_selected.items()}
+        patient_data =  {   
+            'informacion_usuario' : {
+                "gender_Female": 1 if gender == "Femenino" else 0,
+                "gender_Male": 1 if gender == "Masculino" else 0,
+                "age": age,
+                **api_symptoms
+            }
         }
+        
+        
+        imagen = ''
+        predictedProbability = 0
+        # print(patient_data)
+
+        # Llamada a la API
+
+        # Verifica si el request fue exitoso
+        try:
+            response = requests.post("http://127.0.0.1:8000/predict", json=patient_data)
+            if response.status_code == 200:
+                image = 'data:image/png;base64,'+response.json()['imagen']
+                predictedProbability = response.json()['prediction']
+
+
+                # Se puede mostrar usando
+                # st.image(image, use_column_width=True).
+                # 
+                # lo probé pero se veía muy pequeña
+
+        except:
+            # print("Error en el request")
+            print(response.text)  # Imprime el error
+
+
+
         
         # Título centrado en negro
         st.markdown(
