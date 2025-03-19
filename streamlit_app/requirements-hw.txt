@@ -1,0 +1,13 @@
+streamlit
+pillow
+numpy
+scipy
+pandas
+st-pages
+tensorflow
+keras
+streamlit-drawable-canvas
+opencv-python
+######## AGREGAR TUS LIBRERIAS EN REQUIREMENTS-HW ########
+
+######## AGREGAR TUS LIBRERIAS EN REQUIREMENTS-HW ########

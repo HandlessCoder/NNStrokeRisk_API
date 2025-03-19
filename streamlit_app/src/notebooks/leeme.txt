@@ -1,0 +1,3 @@
+En esta sección deben agregar todo el código referente al entrenamiento de los modelos.
+
+Decisiones tomadas y cómo generaron el dataset referente al modelo de operandos.

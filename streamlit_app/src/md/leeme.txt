@@ -1,0 +1,1 @@
+Esta carpeta almacena los posibles mensajes que quieran agregar en al aplicación como st.markdown()
