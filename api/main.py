@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 import base64
 from io import BytesIO
+import matplotlib.pyplot as plt
 
 
 model = strokeModelNN()
@@ -34,15 +35,16 @@ async def predict(data: dict):
     tensorInput = torch.tensor(np.array(input_data).reshape((1,18)))
 
     prediction = model.predict(torch.tensor(input_data))[0].item()
-    shap_values = explainer.shap_values(tensorInput)[0]
-    shap_values = [ shap_value[0] for shap_value in shap_values ]
-    shap_values = np.array(shap_values)
+    shap_values = explainer.shap_values(tensorInput)
+    shap_values = [ shap_value[0] for shap_value in shap_values[0] ]
+    shap_values = np.round(np.array(shap_values).reshape(1,18),4)
 
     shap.initjs()
 
-    p = shap.force_plot(base_value=explainer.expected_value,shap_values= shap_values,matplotlib=True, feature_names = columnas, show = False, out_names = f"Factores de riesgo de un Accidente Cerebro Vascular (ACV) en su caso, {'Sr. ' if input_data[1] != 0.0 else 'Sra. '}{''}", text_rotation=15)
-
+    p = shap.force_plot(base_value=explainer.expected_value[0],shap_values=shap_values,matplotlib=True,features = shap_values, feature_names = columnas, show = False, out_names = "", text_rotation=15, figsize=(15,6))
     buf = BytesIO()
+    plt.title("Desglose por factores de su probabilidad de sufrir un Accidente Cerebro Vascular (ACV)", fontsize=20,x=0.5,y=1.7)
+    plt.subplots_adjust(top=0.55)
     p.savefig(buf, format='png')
     buf.seek(0)
 
