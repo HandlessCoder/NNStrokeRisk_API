@@ -206,7 +206,7 @@ def main():
                 predictedProbability = data.get('prediction', 0)
 
                 # 🔹 Depuración: imprimir la respuesta de la API
-                print("Respuesta de la API:", data)
+                #print("Respuesta de la API:", data)
 
                 # Verifica si la imagen está vacía
                 if not imagen_base64:
