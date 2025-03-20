@@ -41,7 +41,7 @@ async def predict(data: dict):
 
     shap.initjs()
 
-    p = shap.force_plot(base_value=explainer.expected_value[0],shap_values=shap_values,matplotlib=True,features = shap_values, feature_names = columnas, show = False, out_names = "", text_rotation=15, figsize=(15,6))
+    p = shap.force_plot(base_value=explainer.expected_value[0],shap_values=shap_values,matplotlib=True,features = shap_values, feature_names = columnas, show = False, out_names = "", text_rotation=30, figsize=(15,6))
     buf = BytesIO()
     plt.title("Desglose por factores de su probabilidad de sufrir un Accidente Cerebro Vascular (ACV)", fontsize=20,x=0.5,y=1.7)
     plt.subplots_adjust(top=0.55)
