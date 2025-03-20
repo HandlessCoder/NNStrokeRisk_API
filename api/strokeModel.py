@@ -4,6 +4,7 @@ import numpy as np
 
 class strokeModelNN(nn.Module):
   def __init__(self, input_size=18, nodes_per_layers=[128], dropout_rate=0.2, lr=5e-4, w=1e-5):
+    mejorEpoca = 0
     super(strokeModelNN, self).__init__()
 
     self.layers = nn.ModuleList()
@@ -34,7 +35,7 @@ class strokeModelNN(nn.Module):
 
   def forward(self, x):
     if isinstance(x, np.ndarray):
-        x = torch.from_numpy(x)  # Convertir numpy array a Tensor
+      x = torch.from_numpy(x)  # Convertir numpy array a Tensor
     x = x.to(torch.float32)
     x = self.inputLayer(x)
     x = self.activationFunction(x)
@@ -98,6 +99,7 @@ class strokeModelNN(nn.Module):
 
           # Imprimimos los valores de pérdida
           print(f"Pérdida mínima: {bestLoss.item():.6f} en Epoch [{bestEpoch + 1}/{EPOCHS}]")
+          self.mejorEpoca = bestEpoch + 1
           break
 
         self.train()
