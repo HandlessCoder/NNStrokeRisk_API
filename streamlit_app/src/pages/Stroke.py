@@ -118,7 +118,7 @@ def main():
     # Mostrar título y descripción centrados
     st.markdown("""
         <h1 style='text-align: center;color: black;'>Evaluación de Riesgo de Accidente Cerebrovascular</h1>
-        <h3 style='text-align: center;color: black; font-size: 20px;'>Por favor complete la encuesta.</h3>
+        <h3 style='text-align: center;color: black; font-size: 20px;'>Por favor complete la encuesta indicando su edad, género y marcando los sintomas que presente.</h3>
     """, unsafe_allow_html=True)
     
     # Entrada numérica con descripción
@@ -196,22 +196,70 @@ def main():
         # Llamada a la API
 
         # Verifica si el request fue exitoso
+
         try:
             response = requests.post("http://127.0.0.1:8000/predict", json=patient_data)
+            
             if response.status_code == 200:
-                image = 'data:image/png;base64,'+response.json()['imagen']
-                predictedProbability = response.json()['prediction']
+                data = response.json()
+                imagen_base64 = data.get('imagen', '')
+                predictedProbability = data.get('prediction', 0)
+
+                # 🔹 Depuración: imprimir la respuesta de la API
+                print("Respuesta de la API:", data)
+
+                # Verifica si la imagen está vacía
+                if not imagen_base64:
+                    st.error("⚠️ No se recibió imagen desde la API.")
+                
+                # Convertir Base64 en formato visual
+                imagen = f"data:image/png;base64,{imagen_base64}"
+                
+        except Exception as e:
+            st.error(f"❌ Error al obtener la predicción: {str(e)}")
 
 
-                # Se puede mostrar usando
-                # st.image(image, use_column_width=True).
-                # 
-                # lo probé pero se veía muy pequeña
+        # Convertir la probabilidad a porcentaje y mostrarla con el formato adecuado
+        probabilidad_porcentaje = predictedProbability * 100
 
-        except:
-            # print("Error en el request")
-            print(response.text)  # Imprime el error
+        # 🔹 Corregir el título en blanco y aplicar formato uniforme
+        st.markdown(
+            """
+            <h1 style='text-align: center; color: black;'>📊 Probabilidad de Riesgo de Accidente CerebroVascular</h1>
+            """,
+            unsafe_allow_html=True
+        )
 
+
+
+        # 🔹 Mostrar el porcentaje en azul marino, centrado y más grande
+        st.markdown(
+            f"<h1 style='text-align: center; color: #003366; font-weight: bold; font-size: 50px;'>{probabilidad_porcentaje:.2f}%</h1>",
+            unsafe_allow_html=True
+        )
+
+
+        # 🔹 Mostrar la imagen centrada si está disponible
+        if imagen:
+            st.markdown(
+                """
+                <h3 style='text-align: center; color: black;'>📌 Análisis Visual del Riesgo</h3>
+                """,
+                unsafe_allow_html=True
+            )
+            st.image(imagen)
+        
+
+        st.markdown("""
+            <div style='background-color: #f9f9f9; padding: 15px; border-radius: 8px; border-left: 5px solid #4CAF50;'>
+                <h3 style='color: black; font-weight: bold;'>🏥 Análisis de Factores de Riesgo en la Predicción</h3>
+                <p style='color: black; font-size: 16px;'>
+                - <span style='color: red; font-weight: bold;'>🟥 Factores en rojo</span>: Aumentan la probabilidad de riesgo.<br>
+                - <span style='color: blue; font-weight: bold;'>🟦 Factores en azul</span>: Disminuyen la probabilidad de riesgo.<br>
+                - Cuanto más larga la barra, mayor impacto tiene en el resultado.<br>
+                </p>
+            </div>
+        """, unsafe_allow_html=True)
 
 
         
@@ -226,7 +274,7 @@ def main():
         symptoms_list = [label for label, selected in symptoms_selected.items() if selected]
         symptoms_text = ", ".join(symptoms_list) if symptoms_list else "Sin síntomas reportados"
 
-        datos_paciente = f"Edad: {age} años\nGénero: {gender}\nSíntomas reportados: {symptoms_text}"
+        datos_paciente = f"Edad: {age} años\nGénero: {gender}\nSíntomas reportados: {symptoms_text}\nSe ha determinado que el paciente tiene un riesgo de sufrir un ACV de : {round(probabilidad_porcentaje/100,4)}"
 
         recomendaciones = obtener_recomendaciones(datos_paciente)
         
@@ -269,6 +317,3 @@ def main():
         
 if __name__ == "__main__":
     main()
-
-
-
