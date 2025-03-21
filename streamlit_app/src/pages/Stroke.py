@@ -2,13 +2,13 @@ import streamlit as st
 import pandas as pd
 import google.generativeai as genai
 import requests
+import os
+from dotenv import load_dotenv
 
 # Configurar la API Key desde una variable de entorno
-api_key = "AIzaSyC-CnTocy4rY5wqj944xyNGFK8MbzBFE_4"
+load_dotenv()
 
-
-# Configuración de la clave API de Generative AI de Google para realizar solicitudes
-api_key = "AIzaSyC-CnTocy4rY5wqj944xyNGFK8MbzBFE_4"
+api_key = os.getenv('API_KEY')
 
 # Verifica si la clave API está configurada correctamente; muestra un error en caso contrario
 if not api_key:

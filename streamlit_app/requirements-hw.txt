@@ -8,6 +8,8 @@ tensorflow
 keras
 streamlit-drawable-canvas
 opencv-python
+python-dotenv
+
 ######## AGREGAR TUS LIBRERIAS EN REQUIREMENTS-HW ########
 
 ######## AGREGAR TUS LIBRERIAS EN REQUIREMENTS-HW ########
